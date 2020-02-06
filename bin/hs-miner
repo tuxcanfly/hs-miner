@@ -35,6 +35,7 @@ let host;
 let port;
 let user;
 let pass;
+let protocol;
 let version;
 let help;
 
@@ -47,11 +48,12 @@ try {
   threads = config.uint(['threads', 'x'],
     backend === 'simple' ? Miner.getCPUCount() : 26843136);
   device = config.uint(['device', 'd'], -1);
-  ssl = config.str(['rpc-ssl', 'l'], false);
-  host = config.str(['rpc-host', 'i'], 'localhost');
-  port = config.uint(['rpc-port', 'p'], 0);
-  user = config.str(['rpc-user', 'u'], 'hnsrpc');
-  pass = config.str(['rpc-pass', 'k'], '');
+  ssl = config.str(['ssl', 'l'], false);
+  host = config.str(['host', 'i'], 'localhost');
+  port = config.uint(['port', 'p'], 0);
+  user = config.str(['user', 'u'], 'hns');
+  pass = config.str(['pass', 'k'], '');
+  protocol = config.str(['protocol', 'c'], 'solo');
   version = config.bool(['version', 'v'], false);
   help = config.bool(['help', 'h', '?'], false);
 } catch (e) {
@@ -71,12 +73,12 @@ if (help) {
     '  Copyright (c) 2018, Christopher Jeffrey <chjj@handshake.org>');
   console.error('');
   console.error('Usage:');
-  console.error('$ hs-miner --rpc-ssl');
-  console.error('            --rpc-host [host] --rpc-port [port]');
-  console.error('            --rpc-user [user] --rpc-pass [pass]');
+  console.error('$ hs-miner --ssl');
+  console.error('            --host [host] --port [port]');
+  console.error('            --user [user] --pass [pass]');
   console.error('            --backend [backend] --range [range]');
   console.error('            --grids [grids], --blocks [blocks]');
-  console.error('            --threads [threads]');
+  console.error('            --threads [threads] --protocol [solo/stratum]');
   console.error('            --device [device] --help');
   process.exit(1);
 }
@@ -93,7 +95,8 @@ const miner = new Miner({
   host,
   port,
   user,
-  pass
+  pass,
+  protocol
 });
 
 miner.start();

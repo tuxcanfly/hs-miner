@@ -33,7 +33,8 @@
   "dependencies": {
     "bsert": "~0.0.10",
     "loady": "~0.0.1",
-    "nan": "^2.14.0"
+    "nan": "^2.14.0",
+    "ndjson": "^1.5.0"
   },
   "devDependencies": {
     "bmocha": "^2.1.3"
