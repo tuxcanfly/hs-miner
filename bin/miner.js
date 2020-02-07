@@ -34,9 +34,9 @@ class Miner {
     this.maskHash = Buffer.alloc(32, 0x00);
 
     if (this.protocol === 'solo')
-      this.client = new RPCClient(miner, options);
+      this.client = new RPCClient(this, options);
     else if (this.protocol === 'stratum')
-      this.client = new StratumClient(miner, options);
+      this.client = new StratumClient(this, options);
     else
       throw new Error(`Protocol ${this.protocol} not supported!`);
   }
@@ -139,7 +139,6 @@ class Miner {
     // all of the devices.
     if (this.device !== -1) {
       this.log('Using device: %d', this.device);
-      randomize(hdr, miner.EXTRA_NONCE_END - 12, miner.EXTRA_NONCE_END);
       jobs.push(this.job(this.device, hdr, target));
     } else {
       for (let i = 0; i < this.count; i++) {
