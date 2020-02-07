@@ -19,7 +19,7 @@ class Miner {
     this.device = options.device == null ? -1 : options.device;
     this.ssl = options.ssl || false;
     this.host = options.host || 'localhost';
-    this.port = options.port || getPort();
+    this.port = options.port || 12037;
     this.user = options.user || 'hns';
     this.pass = options.pass || '';
     this.protocol = options.protocol || 'solo';
@@ -197,61 +197,9 @@ function randomize(hdr, start, end) {
   random.copy(hdr, start);
 }
 
-function readHeader(hdr) {
-  return {
-    nonce: hdr.readUInt32LE(0),
-    time: readTime(hdr, 4),
-    padding: hdr.slice(12, 32),
-    prevBlock: hdr.slice(32, 64),
-    treeRoot: hdr.slice(64, 96),
-    maskHash: hdr.slice(96, 128),
-    extraNonce: hdr.slice(128, 152),
-    reservedRoot: hdr.slice(152, 184),
-    witnessRoot: hdr.slice(184, 216),
-    merkleRoot: hdr.slice(216, 248),
-    version: hdr.readUInt32LE(248),
-    bits: hdr.readUInt32LE(252)
-  };
-}
-
-function readJSON(hdr) {
-  const json = {
-    nonce: hdr.readUInt32LE(0),
-    time: readTime(hdr, 4),
-    padding: hdr.toString('hex', 12, 32),
-    prevBlock: hdr.toString('hex', 32, 64),
-    treeRoot: hdr.toString('hex', 64, 96),
-    maskHash: hdr.toString('hex', 96, 128),
-    extraNonce: hdr.toString('hex', 128, 152),
-    reservedRoot: hdr.toString('hex', 152, 184),
-    witnessRoot: hdr.toString('hex', 184, 216),
-    merkleRoot: hdr.toString('hex', 216, 248),
-    version: hdr.readUInt32LE(248),
-    bits: hdr.readUInt32LE(252)
-  };
-  return JSON.stringify(json, null, 2);
-}
-
-function getPort() {
-  switch (miner.NETWORK) {
-    case 'main':
-      return 12037;
-    case 'testnet':
-      return 13037;
-    case 'regtest':
-      return 14037;
-    case 'simnet':
-      return 15037;
-    default:
-      return 12037;
-  }
-}
-
 /*
  * Expose
  */
 
 Miner.EXTRA_NONCE_SIZE = miner.EXTRA_NONCE_SIZE;
-Miner.readHeader = readHeader;
-Miner.readJSON = readJSON;
 module.exports = Miner;
