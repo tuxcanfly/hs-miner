@@ -34,9 +34,9 @@ class Miner {
     this.maskHash = Buffer.alloc(32, 0x00);
 
     if (this.protocol === 'solo')
-      this.client = new RPCClient(options);
+      this.client = new RPCClient(miner, options);
     else if (this.protocol === 'stratum')
-      this.client = new StratumClient(options);
+      this.client = new StratumClient(miner, options);
     else
       throw new Error(`Protocol ${this.protocol} not supported!`);
   }
